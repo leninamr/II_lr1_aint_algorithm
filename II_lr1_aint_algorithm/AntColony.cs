@@ -21,74 +21,102 @@ namespace II_lr1_aint_algorithm
         private static int numAnts { get; set; } //количество муравьев
         private static int maxTime { get; set; } //максимальный путь одного муравья
 
+        //private static string filename { get; set; }
+
         private static int[][] dists { get; set; }
 
-        public static void Main()
+        public AntColony(int _alpha = 0, int _beta = 0, double _rho = 0, double _Q = 0 , int _numCities = 0, int _numAnts = 0, int _maxTime = 0)
         {
-            try
-            {
-                Console.WriteLine("\nBegin Ant Colony Optimization\n");
+            alpha = _alpha;
+            beta = _beta;
+            rho = _rho;
+            Q = _Q;
+            numCities = _numCities;
+            numAnts = _numAnts;
+            maxTime = _maxTime;
+        }
+        //public AntColony(int _alpha, int _beta, double _rho, double _Q, int _numCities, int _numAnts, int _maxTime, string _filename)
+        //{
+        //    alpha = _alpha;
+        //    beta = _beta;
+        //    rho = _rho;
+        //    Q = _Q;
+        //    numAnts = _numAnts;
+        //    maxTime = _maxTime;
+        //    filename = _filename;
+        //}
 
-                //объявляем изначальные переменны
+        public void SetDists(int[][] _dists) 
+        { 
+            dists = _dists;
+        }
 
-                //получаем информацию из файла
-                string temp;
-                Console.WriteLine("Enter a filename:");
-                temp = Console.ReadLine();
+        //public static void Main()
+        //{
+        //    try
+        //    {
+        //        Console.WriteLine("\nBegin Ant Colony Optimization\n");
+
+        //        //объявляем изначальные переменны
+
+        //        //получаем информацию из файла
+        //        string temp;
+        //        Console.WriteLine("Enter a filename:");
+        //        temp = Console.ReadLine();
                
 
-                //Выводи все показатели нашего алгоритма
-                Console.WriteLine("Number cities in problem = " + numCities);
-                Console.WriteLine("\nNumber ants = " + numAnts);
-                Console.WriteLine("Maximum time = " + maxTime);
-                Console.WriteLine("\nAlpha (pheromone influence) = " + alpha);
-                Console.WriteLine("Beta (local node influence) = " + beta);
-                Console.WriteLine("Rho (pheromone evaporation coefficient) = " + rho.ToString("F2"));
-                Console.WriteLine("Q (pheromone deposit factor) = " + Q.ToString("F2"));
+        //        //Выводи все показатели нашего алгоритма
+        //        Console.WriteLine("Number cities in problem = " + numCities);
+        //        Console.WriteLine("\nNumber ants = " + numAnts);
+        //        Console.WriteLine("Maximum time = " + maxTime);
+        //        Console.WriteLine("\nAlpha (pheromone influence) = " + alpha);
+        //        Console.WriteLine("Beta (local node influence) = " + beta);
+        //        Console.WriteLine("Rho (pheromone evaporation coefficient) = " + rho.ToString("F2"));
+        //        Console.WriteLine("Q (pheromone deposit factor) = " + Q.ToString("F2"));
 
-                Console.WriteLine("\nInitialing ants to random trails\n");
-                int[][] ants = InitAnts(numAnts, numCities); // запускаем иуравья по случайному пути
+        //        Console.WriteLine("\nInitialing ants to random trails\n");
+        //        int[][] ants = InitAnts(numAnts, numCities); // запускаем иуравья по случайному пути
 
-                int[] bestTrail = BestTrail(ants, dists); // обозначаем лучший инициализированный путь
-                double bestLength = Length(bestTrail, dists); // длина лучшего инициализированного пути
+        //        int[] bestTrail = BestTrail(ants, dists); // обозначаем лучший инициализированный путь
+        //        double bestLength = Length(bestTrail, dists); // длина лучшего инициализированного пути
 
-                //заносим информацию о первом ферромонном пути
-                Console.Write("\nBest initial trail length: " + bestLength.ToString("F1") + "\n");
-                Console.WriteLine("\nInitializing pheromones on trails");
-                double[][] pheromones = InitPheromones(numCities);
+        //        //заносим информацию о первом ферромонном пути
+        //        Console.Write("\nBest initial trail length: " + bestLength.ToString("F1") + "\n");
+        //        Console.WriteLine("\nInitializing pheromones on trails");
+        //        double[][] pheromones = InitPheromones(numCities);
 
-                //проводим цикл исследований
-                int time = 0;
-                Console.WriteLine("\nEntering UpdateAnts - UpdatePheromones loop\n");
-                while (time < maxTime)
-                {
-                    UpdateAnts(ants, pheromones, dists);
-                    UpdatePheromones(pheromones, ants, dists);
+        //        //проводим цикл исследований
+        //        int time = 0;
+        //        Console.WriteLine("\nEntering UpdateAnts - UpdatePheromones loop\n");
+        //        while (time < maxTime)
+        //        {
+        //            UpdateAnts(ants, pheromones, dists);
+        //            UpdatePheromones(pheromones, ants, dists);
 
-                    int[] currBestTrail = BestTrail(ants, dists);
-                    double currBestLength = Length(currBestTrail, dists);
-                    if (currBestLength < bestLength)
-                    {
-                        bestLength = currBestLength;
-                        bestTrail = currBestTrail;
-                        Console.WriteLine("New best length of " + bestLength.ToString("F1") + " found at time " + time);
-                    }
-                    ++time;
-                }
+        //            int[] currBestTrail = BestTrail(ants, dists);
+        //            double currBestLength = Length(currBestTrail, dists);
+        //            if (currBestLength < bestLength)
+        //            {
+        //                bestLength = currBestLength;
+        //                bestTrail = currBestTrail;
+        //                Console.WriteLine("New best length of " + bestLength.ToString("F1") + " found at time " + time);
+        //            }
+        //            ++time;
+        //        }
 
-                //вывод наилучшего пути и информации о нем
-                Console.WriteLine("\nBest trail found:");
-                Display(bestTrail);
-                Console.WriteLine("\nLength of best trail found: " + bestLength.ToString("F1"));
-                Console.ReadLine();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                Console.ReadLine();
-            }
+        //        //вывод наилучшего пути и информации о нем
+        //        Console.WriteLine("\nBest trail found:");
+        //        Display(bestTrail);
+        //        Console.WriteLine("\nLength of best trail found: " + bestLength.ToString("F1"));
+        //        Console.ReadLine();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine(ex.Message);
+        //        Console.ReadLine();
+        //    }
 
-        }
+        //}
         //метод создания муравьёв и первичной инициализации их пути
         private static int[][] InitAnts(int numAnts, int numCities)
         {
