@@ -11,11 +11,17 @@ namespace II_lr1_aint_algorithm
         private static readonly Random random = new Random(0);
 
         //спецификаторы алгоритма
-        private static readonly int alpha = 3; // влияние феромона на направление
-        private static readonly int beta = 2;  // влияние расстояния между соседними узлами
+        private static int alpha { get; set; } // влияние феромона на направление
+        private static int beta { get; set; }  // влияние расстояния между соседними узлами
 
-        private static readonly double rho = 0.01; // коэффициент снижения феромонов
-        private static readonly double Q = 2.0;   // коэффициент увеличения феромонов
+        private static double rho { get; set; } // коэффициент снижения феромонов
+        private static double Q { get; set; }   // коэффициент увеличения феромонов
+
+        private static int numCities { get; set; } //число узлов графа
+        private static int numAnts { get; set; } //количество муравьев
+        private static int maxTime { get; set; } //максимальный путь одного муравья
+
+        private static int[][] dists { get; set; }
 
         public static void Main()
         {
@@ -23,16 +29,13 @@ namespace II_lr1_aint_algorithm
             {
                 Console.WriteLine("\nBegin Ant Colony Optimization\n");
 
-                //объявляем изначальные переменные
-                int numCities = 0; //число узлов графа
-                int numAnts = 4; //количество муравьев
-                int maxTime = 1000; //максимальный путь одного муравья
+                //объявляем изначальные переменны
 
                 //получаем информацию из файла
                 string temp;
                 Console.WriteLine("Enter a filename:");
                 temp = Console.ReadLine();
-                int[][] dists = MakeGraphDistances(temp, ref numCities);
+               
 
                 //Выводи все показатели нашего алгоритма
                 Console.WriteLine("Number cities in problem = " + numCities);
